@@ -13,7 +13,7 @@ const NavBar = () => {
 
     return (
         <nav className='navbar navbar-expand-lg fixed-top navbar-dark' style={{backgroundColor: '#070707'}}>
-            <div className='container-fluid '>
+            <div className='container-fluid'>
                 <Link to='/' className='navbar-brand'><h4 className='text-danger'>Movie Watcher</h4></Link>
                 <>
                 <form className="d-flex mx-auto" style={{flexGrow: 0.6}}>

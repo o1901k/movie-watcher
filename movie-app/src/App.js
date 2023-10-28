@@ -7,16 +7,19 @@ import AuthContext from './context/AuthContext';
 import { Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { userObserver } from './firebase';
+import MovieContext from './context/MovieContext';
 
 
 
 function App() {
   const [LogInUser, setLogInUser] =  useState(true);
+  const [movies, setMovies] = useState([]);
   useEffect(() => {
     userObserver(setLogInUser);
   }, [])
   return (
     <AuthContext.Provider value={{LogInUser}}>
+    <MovieContext.Provider value={{movies, setMovies}}>
     <NavBar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -24,6 +27,7 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/details/:id' element={<MovieDetails/>}/>
       </Routes>
+      </MovieContext.Provider>
     </AuthContext.Provider>   
   )
    
