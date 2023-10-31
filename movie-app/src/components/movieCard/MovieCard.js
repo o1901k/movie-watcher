@@ -9,30 +9,30 @@ import { createPortal } from 'react-dom';
 const MovieCard = (props) => {
 const navigate = useNavigate();
 const {LogInUser} = useContext(AuthContext);
-const {nameOriginal, nameRu, ratingKinopoisk, posterUrl, kinopoiskId, year, type} = props.movie;
+const {nameOriginal, nameRu, ratingKinopoisk, posterUrl, kinopoiskId, year, type, rating, filmId} = props.movie;
 const [showModal, setShowModal] = useState(false);
 
   
-const showDetails = (kinopoiskId) => {
+const showDetails = (id) => {
     if(LogInUser) {
-        navigate(`/details/${kinopoiskId}`)
+        navigate(`/details/${id}`)
     } else { return setShowModal(true)}};
 
 const setRatingColor = (rating) => {
 if (rating >= 8) return 'green';
 else if(rating >= 6) return 'orange';
-else if (rating === null) return '';
-else return 'red';
+else if (rating < 6) return 'red';
+else return '';
 };
     return (
         <>       
-        <div className={classes.movie} onClick={()=> showDetails(kinopoiskId)}>
+        <div className={classes.movie} onClick={()=> showDetails(kinopoiskId||filmId)}>
         <img src={posterUrl} alt={nameOriginal} />
             <div className='text-center p-2 text-white' style={{borderTop: '1px solid white'}}>
             <h5>{nameOriginal}</h5>
             <h5>{nameRu}</h5>
             {LogInUser&&(
-                <><span className={ classes.rating } style={{backgroundColor: setRatingColor(ratingKinopoisk)}}>{ratingKinopoisk}</span>
+                <><span className={ classes.rating } style={{backgroundColor: setRatingColor(ratingKinopoisk||rating)}}>{ratingKinopoisk||rating}</span>
                 <button title='Add to favorite' type="button" className={classes.favorite}><i className="fa-regular fa-heart fa-2x" style={{color: '#f51919'}}/></button>
                 </>
                 )}
@@ -47,7 +47,7 @@ else return 'red';
                 <div className=' vw-100 vh-100' style={{position: 'absolute', top: '0', backgroundColor: 'rgba(0, 0, 0, 0.7)'}}> 
                 <div className='class="alert alert-light text-center p-4' style={{position: 'fixed', top: '40%', left: '40%'}}>
                 <h5>Please, LogIn to see movie details.</h5>
-                 <button type="button" class="btn btn-outline-danger mt-3" onClick={() => setShowModal(false)}>Ok</button>
+                 <button type="button" className="btn btn-outline-danger mt-3" onClick={() => setShowModal(false)}>Ok</button>
                 </div>
             </div>
                 </>, document.body)}  

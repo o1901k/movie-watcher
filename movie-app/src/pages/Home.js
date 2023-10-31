@@ -16,7 +16,7 @@ const Home = () => {
         };
         return (
             <div className='d-flex justify-content-center flex-wrap page' style={{background: '#070707'}}>
-            {movies.map(movie => <MovieCard key={movie.kinopoiskId} movie={movie}/>)}
+            {movies.map(movie => <MovieCard key={movie.kinopoiskId || movie.filmId} movie={movie}/>)}
         </div>
     )
 }

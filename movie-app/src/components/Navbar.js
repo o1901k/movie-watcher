@@ -1,15 +1,31 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { logout } from '../firebase';
+import MovieContext from '../context/MovieContext';
+import axios from 'axios';
 
+   
+    
+    
 const NavBar = () => {
     const {LogInUser} = useContext(AuthContext);
     const navigate = useNavigate();
+    const {movies, setMovies} = useContext(MovieContext);
+    const [search, setSearch] = useState('');
+    const baseUrl = ' https://kinopoiskapiunofficial.tech/api/v2.1/films';
+    axios.defaults.headers = {'X-API-KEY': '6c5fa0f9-d88e-4ccf-b2be-86198565ef10'};
+    const searchUrl = `${baseUrl}/search-by-keyword?keyword=`;
+
     const logoutHandler = () => {
         logout();
         navigate('/');
     };
+    const seacrchHandler = async () => {
+        const result = await axios.get(`${searchUrl}${search}`);
+        console.log(result.data)
+        setMovies(result.data.films);
+    }
 
     return (
         <nav className='navbar navbar-expand-lg fixed-top navbar-dark' style={{backgroundColor: '#070707'}}>
@@ -18,8 +34,8 @@ const NavBar = () => {
                 <>
                 <form className="d-flex mx-auto" style={{flexGrow: 0.6}}>
                     <input className="form-control me-2" type="search" placeholder="Search" 
-                    aria-label="Search"  style={{flexBasic: 200}} />
-                    <button className="btn btn-outline-danger" type="button">Search</button>
+                    aria-label="Search"  style={{flexBasic: 200}} onChange={ (event) => setSearch(event.target.value) } value = { search }/>
+                    <button className="btn btn-outline-danger" type="button" onClick={ seacrchHandler }>Search</button>
                 </form>
                 </>
                 <div className='d-flex align-items-center mx-auto'>
