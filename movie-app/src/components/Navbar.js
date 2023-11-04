@@ -26,7 +26,6 @@ const NavBar = () => {
         console.log(result.data)
         setMovies(result.data.films);
     }
-
     return (
         <nav className='navbar navbar-expand-lg fixed-top navbar-dark' style={{backgroundColor: '#070707'}}>
             <div className='container-fluid'>
@@ -42,7 +41,7 @@ const NavBar = () => {
                  {LogInUser? (
                       <>
                         <button type='button' className='ms-2 btn btn-outline-light' >History</button>
-                        <button type='button' className='ms-2 btn btn-outline-light' >Favorites</button>
+                        <button type='button' className='ms-2 btn btn-outline-light' onClick={() => navigate('/favorites')}>Favorites</button>
                         <h4 className='text-capitalize d-inline-block text-light mx-2'>{ LogInUser?.displayName }</h4>
                         <button type='button' className='ms-2 btn btn-outline-danger' onClick={logoutHandler}>LogOut</button>
                       </>  

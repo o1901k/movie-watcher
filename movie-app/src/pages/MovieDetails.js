@@ -1,12 +1,13 @@
-
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import FavoriteContext from '../context/FavoriteContext';
 
 const MovieDetails = () => {
     const [MovieDetails, setMovieDetails] = useState();
     const {id} = useParams();
+    const  {favoriteMovies, setFavoriteMovies} = useContext(FavoriteContext);
     const baseUrl = 'https://kinopoiskapiunofficial.tech/api/v2.2/films';
     const movieDetailsUrl = `${baseUrl}/${id}`;
     axios.defaults.headers = {'X-API-KEY': '6c5fa0f9-d88e-4ccf-b2be-86198565ef10'};
@@ -15,6 +16,21 @@ const MovieDetails = () => {
         axios.get(movieDetailsUrl).then(result=> {console.log(result.data); setMovieDetails(result.data)});
      }, []);
     
+    const addFavouriteMovie = (id) => {
+        localStorage.setItem(id, id);
+        axios.get(`${baseUrl}/${id}`).then(res=> { 
+            const newFavouriteList = [...favoriteMovies, res.data];
+            setFavoriteMovies(newFavouriteList)})	
+	};
+
+	const removeFavouriteMovie = (id) => {
+        localStorage.removeItem(id);
+		const newFavouriteList = favoriteMovies.filter(
+			(favoriteMovie) => favoriteMovie.kinopoiskId !== id
+		);
+		setFavoriteMovies(newFavouriteList);
+	};
+
     return (
         <div className='py-5 page' style={{background: '#555'}}>
             <div className='container'>
@@ -27,8 +43,13 @@ const MovieDetails = () => {
                                 <b>Year:</b> <span>{MovieDetails?.year}</span></li>
                                 <li className='list-group-item d-flex justify-content-between'>
                                 <b>Rate:</b> <span>{MovieDetails?.ratingKinopoisk || MovieDetails?.ratingImdb}</span></li>
-                                <li className='list-group-item d-flex justify-content-center'>
-                                <button title='Add to favorite' type="button" className='btn btn-outline-danger'>Add to favorite</button></li>
+                                {localStorage.getItem(MovieDetails?.kinopoiskId) ? (
+                                    <li className='list-group-item d-flex justify-content-center'>
+                                <button title='Add to favorite' type="button" className='btn btn-outline-danger' id={MovieDetails?.kinopoiskId} onClick={() => removeFavouriteMovie(id)}>Remove from favorite</button></li>
+                                ) : (
+                                    <li className='list-group-item d-flex justify-content-center'>
+                                <button title='Add to favorite' type="button" className='btn btn-outline-danger'  id={MovieDetails?.kinopoiskId} onClick={() => addFavouriteMovie(id)}>Add to favorite</button></li>
+                                )}
                                 <li className='list-group-item text-center'>
                                 <Link to={-1} className='btn btn-primary'>Go Back</Link>
                                 </li>

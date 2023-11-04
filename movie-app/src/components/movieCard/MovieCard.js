@@ -3,7 +3,7 @@ import classes from './MovieCard.module.css';
 import AuthContext from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
-
+import MovieFavoriteBtn from './MovieFavoriteBtn';
 
 
 const MovieCard = (props) => {
@@ -28,12 +28,12 @@ else return '';
         <>       
         <div className={classes.movie} onClick={()=> showDetails(kinopoiskId||filmId)}>
         <img src={posterUrl} alt={nameOriginal} />
-            <div className='text-center p-2 text-white' style={{borderTop: '1px solid white'}}>
+            <div className='text-center p-2 text-white' style={{borderTop: '1px solid white'}} onClick={(e) => e.stopPropagation()}>
             <h5>{nameOriginal}</h5>
             <h5>{nameRu}</h5>
             {LogInUser&&(
                 <><span className={ classes.rating } style={{backgroundColor: setRatingColor(ratingKinopoisk||rating)}}>{ratingKinopoisk||rating}</span>
-                <button title='Add to favorite' type="button" className={classes.favorite}><i className="fa-regular fa-heart fa-2x" style={{color: '#f51919'}}/></button>
+                <MovieFavoriteBtn kinopoiskId={kinopoiskId||filmId} />
                 </>
                 )}
             </div>
